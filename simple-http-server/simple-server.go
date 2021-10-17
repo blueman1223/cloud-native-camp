@@ -10,11 +10,17 @@ import (
 )
 
 func main() {
+	port := os.Getenv("MY_SERVICE_PORT")
+	if port == "" {
+		fmt.Println("Env MY_SERVICE_PORT not set, default is 8080")
+		port = "8080"
+	}
+
 	flag.Set("v", "4")
 	http.HandleFunc("/", rootHandler)
 	http.HandleFunc("/healthz", healthz)
 
-	err := http.ListenAndServe(":8080", nil)
+	err := http.ListenAndServe(":"+port, nil)
 	if err != nil {
 		log.Fatal(err)
 	}
